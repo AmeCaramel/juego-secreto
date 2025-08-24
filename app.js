@@ -1,89 +1,73 @@
-function encontrarPosicion(lista, elementoBuscado) {
-    for (let indice = 0; indice < lista.length; indice++) {
-        if (lista[indice]) === elementoBuscado) {
-            return indice; //lo encontramos, devolvemos su posicion
+let numeroSecreto = 0;
+let intentos = 0;
+let listaNumerosSorteados = [];
+let numeroMaximo = 10;
+
+console.log(numeroSecreto);
+function asignarTextoElemento(elemento, texto) {
+    let elementoHTML = document.querySelector(elemento);
+    elementoHTML.innerHTML = texto;
+    return;
+}
+
+function verificarIntento() {
+    let numeroDeUsuario = parseInt(document.getElementById('valorUsuario').value);
+    
+    console.log(intentos);
+    if (numeroDeUsuario === numeroSecreto) {
+        asignarTextoElemento('p',`Acertaste el número en ${intentos} ${(intentos === 1) ? 'vez' : 'veces'}`);
+        document.getElementById('reiniciar').removeAttribute('disabled');
+    } else {
+        //el usuario no acertó.
+        if (numeroDeUsuario > numeroSecreto) {
+            asignarTextoElemento('p', 'El número secreto es menor');
+        } else {
+            asignarTextoElemento('p', 'El número secreto es mayor');
+        }
+        intentos++;
+        limpiarCaja();
+    }
+    return;
+}
+
+function limpiarCaja() {
+    document.querySelector('#valorUsuario').value = '';
+}
+
+function generarNumeroSecreto(params) {
+    let numeroGenerado = Math.floor(Math.random()*numeroMaximo)+1;
+
+    console.log(numeroGenerado);
+    console.log(listaNumerosSorteados);
+    //Si ya sorteamos todos los numeros podemos mostrar un mensaje en la pantalla y cerrar de nuevo
+    if (listaNumerosSorteados.length == numeroMaximo) {
+        asignarTextoElemento('p','Ya se sortearon todos los numeros posibles');
+    } else {
+        //Si el numero generado esta incluido en la lista hacemos una operacion, sino hacemos otra
+        if (listaNumerosSorteados.includes(numeroGenerado)) {
+            return generarNumeroSecreto();
+        } else {
+            listaNumerosSorteados.push(numeroGenerado);
+            return numeroGenerado;
         }
     }
-    return -1; //si no aparece en la lista
 }
 
-// ejemplo 1
-console.log(encontrarPosicion([10, 20, 30, 40], 30)); //devuelve 2
-//ejemplo 2
-console.log(encontrarPosicion([10, 20, 30, 40], 99)); //-1
-
-
-/*function sumaElementos(lista) {
-    let suma = 0; //empezamos desde 0
-    for (let indice = 0; indice < lista.length; indice++) {
-        suma += lista[indice]; //sumamos cada elemento a la variable "suma"
-    }
-    return suma; //devolvemos el resultado final
-
+function condicionesIniciales() {
+    asignarTextoElemento('h1','Juego del número secreto!');
+    asignarTextoElemento('p',`Indica un numero del 1 al ${numeroMaximo}`);
+    numeroSecreto = generarNumeroSecreto();
+    intentos = 1;
 }
 
-//ejemplo
-console.log(sumaElementos([3,5,7])); //15*/
-
-/*function mostrarMinMax(listaNumeros) {
-    //usamos funciones de Math para encontrar el menor y mayor
-    let minimo = Math.min(...listaNumeros);
-    let maximo = Math.max(...listaNumeros);
-
-    console.log('Numero mas pequeño:', minimo);
-    console.log('Numero mas grande:', maximo);
+function reiniciarJuego() {
+    //Limpiar caja
+    limpiarCaja();
+    //Indicar mensaje de intervalo de números (o inicio?)
+    //Generar el número aleatorio
+    //Inicializar el número de intentos
+    condicionesIniciales();
+    //Deshabilitar el botón de nuevo juego
+    document.querySelector('#reiniciar').setAttribute('disabled', 'true');
 }
-// Ejemplo de uso
-mostrarMinMax([3,7,2,9,5]);*/
-
-// version manual
-
-/*function mostrarMinMax(listaNumeros) {
-    let minimo = listaNumeros[0]; //arrancamos con el primero
-    let maximo = listaNumeros[0];
-
-    for (let i = 1; i < listaNumeros.length; i++) { //empezamos desde el segundo elemento?(comentatio del programa)
-        if (listaNumeros[i] < minimo) {
-            minimo = listaNumeros[i];
-        }
-        if (listaNumeros[i] > maximo) {
-            maximo = listaNumeros[i];
-        }
-}
-
-console.log('Numero mas pequeño:', minimo);
-console.log('Numero mas grande:', maximo);
-}
-
-// Ejemplo
-mostrarMinMax([3, 7, 2, 9, 5]);*/
-
-/*Crea una función que calcule el promedio de los elementos en una lista de números.*/
-/*function calcularPromedio(listaNumeros) {
-    let suma = 0; //acá guardamos la suma de todos los números
-
-    for (let i = 0; i < listaNumeros.length; i++) {
-        suma = suma + listaNumeros[i]; //sumamos cada numero
-    }
-
-    let promedio = suma / listaNumeros.length; //calculamos el promedio dividiendo la suma por la cantidad de números
-    return promedio; //devolvemos el promedio
-
-}
-
-let numeros = [4, 8, 6, 10];
-console.log(calcularPromedio(numeros)); // 7*/
-
-/*let lenguagesDeProgramacion = ['JavaScript', 'C', 'C++', 'Kotlin', 'Python'];
-lenguagesDeProgramacion.push('Java', 'Ruby', 'GoLang');
-/*console.log(lenguagesDeProgramacion);*/
-/*function mostrarInverso() {
-    for (let i = lenguagesDeProgramacion.length - 1; i >= 0; i--) {
-        console.log(lenguagesDeProgramacion[i]);
-    }
-}
-
-mostrarInverso();*/
-
-/*let listaGenerica = [];*/
-
+condicionesIniciales();
